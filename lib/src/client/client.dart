@@ -58,6 +58,10 @@ class AwsS3Client {
     return _doSignedGetRequest(key: key);
   }
 
+  Future<Response> getAudio(String key) {
+    return _getAudio(key: key);
+  }
+
   String keytoPath(String key) =>
       "${'/$key'.split('/').map(Uri.encodeQueryComponent).join('/')}";
 
@@ -103,6 +107,16 @@ $payload''';
       'x-amz-date': datetime,
     });
   }
+
+  Future<Response> _getAudio({
+    String key,
+    Map<String, String> queryParams,
+  }) async {
+    final SignedRequestParams params =
+    buildSignedGetParams(key: key, queryParams: queryParams);
+    return get(params.uri,headers: params.headers);
+  }
+
 
   Future<Response> _doSignedGetRequest({
     String key,
